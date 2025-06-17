@@ -1,6 +1,6 @@
 import json
 import pytest
-from lambda.handler import lambda_handler
+from lambda_func.handler import lambda_handler
 from moto import mock_dynamodb
 import boto3
 

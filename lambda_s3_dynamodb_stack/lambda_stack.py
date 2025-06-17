@@ -31,7 +31,7 @@ class LambdaS3DynamoDBStack(Stack):
             self, "MyFunction",
             runtime=_lambda.Runtime.PYTHON_3_12,
             handler="handler.lambda_handler",
-            code=_lambda.Code.from_asset("lambda"),
+            code=_lambda.Code.from_asset("lambda_func"),
             timeout=Duration.seconds(10),
             memory_size=256,
             ephemeral_storage_size=Size.mebibytes(512),
