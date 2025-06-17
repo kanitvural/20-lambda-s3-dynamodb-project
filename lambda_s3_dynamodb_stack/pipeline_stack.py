@@ -1,6 +1,20 @@
+
+# CodeStar Connection Manually Created
+# Uncomment the following lines if you want to create a new connection programmatically.
+# from aws_cdk import aws_codestarconnections as codestar
+
+# connection = codestar.CfnConnection(
+#     self, "GitHubConnection",
+#     connection_name="GitHubConnection", # Created in AWS CodeStar Connections
+#     provider_type="GitHub"
+# )
+# connection_arn_value = connection.attr_connection_arn
+
+
+
 import os
 from aws_cdk import pipelines as pipelines
-from aws_cdk import Stack, Environment, aws_codestarconnections as codestar
+from aws_cdk import Stack, Environment
 from constructs import Construct
 from .lambda_stage import LambdaDeployStage
 
@@ -10,23 +24,12 @@ class CICDPipelineStack(Stack):
         
         connection_arn = os.getenv("GITHUB_CONNECTION_ARN", None)
         
-        if connection_arn:
-            connection_arn_value = connection_arn
-        else:
-            
-            connection = codestar.CfnConnection(
-                self, "GitHubConnection",
-                connection_name="GitHubConnection", # Created in AWS CodeStar Connections
-                provider_type="GitHub"
-            )
-            connection_arn_value = connection.attr_connection_arn
-
         pipeline = pipelines.CodePipeline(self, "Pipeline",
             synth=pipelines.ShellStep("Synth",
                 input=pipelines.CodePipelineSource.connection(
                     repo_string="kanitvural/20-lambda-s3-dynamodb-project",
                     branch="main",
-                    connection_arn=connection_arn_value
+                    connection_arn=connection_arn
                 ),
                 commands=[
                     "npm install -g aws-cdk",
