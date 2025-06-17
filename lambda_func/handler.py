@@ -4,9 +4,10 @@ import boto3
 
 dynamodb = boto3.client("dynamodb")
 
-TABLE_NAME = os.getenv("TABLE_NAME", None)
-
 def lambda_handler(event, context):
+    
+    TABLE_NAME = os.getenv("TABLE_NAME", None)
+    
     for record in event["Records"]:
         file_name = record["s3"]["object"]["key"]
         dynamodb.put_item(
