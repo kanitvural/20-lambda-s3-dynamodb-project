@@ -26,6 +26,16 @@ class LambdaS3DynamoDBStack(Stack):
             actions=["dynamodb:PutItem"],
             resources=[table.table_arn]
         ))
+        
+        lambda_role.add_to_policy(iam.PolicyStatement(
+            actions=[
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            resources=["*"]  # yalnızca loglar
+        ))
+       
 
         fn = _lambda.Function(
             self, "MyFunction",
@@ -35,7 +45,10 @@ class LambdaS3DynamoDBStack(Stack):
             timeout=Duration.seconds(10),
             memory_size=256,
             ephemeral_storage_size=Size.mebibytes(512),
-            role=lambda_role
+            role=lambda_role,
+            environment={
+                "TABLE_NAME": table.table_name
+            }
         )
 
         bucket.add_event_notification(s3.EventType.OBJECT_CREATED, s3n.LambdaDestination(fn))

@@ -1,9 +1,10 @@
+import os
 import json
 import boto3
 
 dynamodb = boto3.client("dynamodb")
 
-TABLE_NAME = "MyTable"
+TABLE_NAME = os.getenv("TABLE_NAME", None)
 
 def lambda_handler(event, context):
     for record in event["Records"]:
