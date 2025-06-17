@@ -8,8 +8,8 @@ class CICDPipelineStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         connection = codestar.CfnConnection(
-            self, "GitHubConnection",
-            connection_name="GitHubConnection",
+            self, "GithubConnection",
+            connection_name="GithubConnection", # Created in AWS CodeStar Connections
             provider_type="GitHub"
         )
 
