@@ -24,6 +24,7 @@ class CICDPipelineStack(Stack):
         
         connection_arn = os.getenv("GITHUB_CONNECTION_ARN", None)
         
+        
         pipeline = pipelines.CodePipeline(self, "Pipeline",
             synth=pipelines.ShellStep("Synth",
                 input=pipelines.CodePipelineSource.connection(
