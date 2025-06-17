@@ -55,4 +55,10 @@ command.
  * `cdk diff`        compare deployed stack with current state
  * `cdk docs`        open CDK documentation
 
+cdk bootstrap aws://<ACCOUNT_ID>/<REGION>
+
+cdk bootstrap aws://058264126563/eu-central-1
+
+
+
 Enjoy!
