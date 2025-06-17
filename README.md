@@ -70,6 +70,8 @@ $ pytest tests/
 ```bash
 # Destroy all CDK stacks created by the pipeline
 $ cdk destroy LambdaS3DynamoDBPipelineStack
+$ cdk destroy DeployStage-LambdaStack
+
 
 # If you need to remove the bootstrapped resources as well
 $ cdk bootstrap aws://<ACCOUNT_ID>/eu-central-1 --termination

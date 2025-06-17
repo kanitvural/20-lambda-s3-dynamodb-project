@@ -26,3 +26,17 @@ def test_lambda_handler_mocked(mock_dynamodb):
 
     # Test bittikten sonra ortam değişkenini temizleyebiliriz
     del os.environ["TABLE_NAME"]
+
+
+# Lambda test
+# {
+#   "Records": [
+#     {
+#       "s3": {
+#         "object": {
+#           "key": "example.txt"
+#         }
+#       }
+#     }
+#   ]
+# }
