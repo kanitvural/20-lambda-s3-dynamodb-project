@@ -2,4 +2,5 @@ aws-cdk-lib==2.200.1
 constructs>=10.0.0,<11.0.0
 pytest
 boto3
-moto
+moto[dynamodb2]==4.2.8
+

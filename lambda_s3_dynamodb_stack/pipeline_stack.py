@@ -22,8 +22,8 @@ class CICDPipelineStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs):
         super().__init__(scope, construct_id, **kwargs)
         
-        connection_arn = os.getenv("GITHUB_CONNECTION_ARN", None)
-        
+        # cdk.json context variable for CodeStar GitHub connection ARN
+        connection_arn = self.node.try_get_context("githubConnectionArn")
         
         pipeline = pipelines.CodePipeline(self, "Pipeline",
             synth=pipelines.ShellStep("Synth",
