@@ -47,12 +47,16 @@ class CICDPipelineStack(Stack):
 
         test_step = pipelines.CodeBuildStep("TestStep",
             input=source,
-            build_spec=codebuild.BuildSpec.from_source_filename("buildspec_test.yaml"),
+            commands=[
+                "pip install -r requirements.txt",
+                "pytest tests/"
+            ],
             build_environment=codebuild.BuildEnvironment(
                 compute_type=codebuild.ComputeType.SMALL,
                 build_image=codebuild.LinuxBuildImage.STANDARD_5_0
             )
         )
+
 
         pipeline = pipelines.CodePipeline(self, "Pipeline",
             synth=synth_step)
