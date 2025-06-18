@@ -36,6 +36,7 @@ A fully‑automated CI/CD reference project that demonstrates how to:
 │   ├── lambda_stage.py          # Wraps the stack into a Stage
 │   └── pipeline_stack.py        # CodePipeline definition
 ├── app.py                       # CDK App entry point
+├── requirements.txt             # Required python packages
 ├── cdk.json                     # CDK Configuration
 ├── .gitignore                   # Ignores unwanted project files.
 ├── LICENSE.md                   # MIT License
