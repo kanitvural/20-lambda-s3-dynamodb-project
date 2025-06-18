@@ -67,5 +67,8 @@ class CICDPipelineStack(Stack):
             ),
         )
 
-  
+        manual_approval = pipelines.ManualApprovalStep("ManualApproval")
+        
+        manual_approval.add_step_dependency(test_step)
+
         pipeline.add_stage(deploy_stage, pre=[test_step])
