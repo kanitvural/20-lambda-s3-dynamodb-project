@@ -10,15 +10,10 @@
 # connection_arn_value = connection.attr_connection_arn
 
 
-
-
-from aws_cdk import (
-    pipelines as pipelines,
-    aws_codebuild as codebuild,
-    Stack, Environment
-)
+from aws_cdk import pipelines as pipelines, aws_codebuild as codebuild, Stack, Environment
 from constructs import Construct
 from .lambda_stage import LambdaDeployStage
+
 
 class CICDPipelineStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs):
@@ -27,114 +22,43 @@ class CICDPipelineStack(Stack):
         conn = self.node.try_get_context("githubConnectionArn")
         source = pipelines.CodePipelineSource.connection(
             repo_string="kanitvural/20-lambda-s3-dynamodb-project",
-            branch="main", connection_arn=conn)
+            branch="main",
+            connection_arn=conn,
+        )
 
-        synth_step = pipelines.ShellStep("Synth",
+        synth_step = pipelines.ShellStep(
+            "Synth",
             input=source,
             commands=[
                 "npm install -g aws-cdk",
                 "pip install -r requirements.txt",
-                "cdk synth"
+                "cdk synth",
             ],
             # primary_output_directory="../cdk.out",
             # env={
             #     "AWS_DEFAULT_REGION": "eu-central-1",
             #     "AWS_REGION": "eu-central-1"
             # },
-            
             # fallback default build environment
         )
+        
+        manual_approval = pipelines.ManualApprovalStep("ManualApproval")
 
-        test_step = pipelines.CodeBuildStep("TestStep",
+        test_step = pipelines.CodeBuildStep(
+            "TestStep",
             input=source,
             commands=[
                 "pip install -r requirements.txt",
-                "pytest tests/"
+                "pytest tests/",
             ],
             build_environment=codebuild.BuildEnvironment(
                 compute_type=codebuild.ComputeType.SMALL,
-                build_image=codebuild.LinuxBuildImage.STANDARD_5_0
-            )
+                build_image=codebuild.LinuxBuildImage.STANDARD_5_0,
+            ),
         )
 
+        pipeline = pipelines.CodePipeline(self, "Pipeline", synth=synth_step)
 
-        pipeline = pipelines.CodePipeline(self, "Pipeline",
-            synth=synth_step)
+        deploy_stage = LambdaDeployStage(self, "DeployStage", env=Environment(region="eu-central-1"))
 
-        deploy_stage = LambdaDeployStage(self, "DeployStage",
-            env=Environment(region="eu-central-1"))
-
-        pipeline.add_stage(deploy_stage, pre=[test_step])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# import os
-# from aws_cdk import pipelines as pipelines
-# from aws_cdk import Stack, Environment
-# from constructs import Construct
-# from .lambda_stage import LambdaDeployStage
-# from aws_cdk import aws_codebuild as codebuild
-
-
-# class CICDPipelineStack(Stack):
-#     def __init__(self, scope: Construct, construct_id: str, **kwargs):
-#         super().__init__(scope, construct_id, **kwargs)
-
-#         # cdk.json context variable for CodeStar GitHub connection ARN
-#         connection_arn = self.node.try_get_context("githubConnectionArn")
-
-#         pipeline = pipelines.CodePipeline(
-#             self,
-#             "Pipeline",
-#             synth=pipelines.ShellStep(
-#                 "Synth",
-#                 input=pipelines.CodePipelineSource.connection(
-#                     repo_string="kanitvural/20-lambda-s3-dynamodb-project",
-#                     branch="main",
-#                     connection_arn=connection_arn,
-#                 ),
-#                 commands=[
-#                     "npm install -g aws-cdk",
-#                     "pip install -r requirements.txt",
-#                     "pytest",
-#                     "cdk synth",
-#                 ],
-#                 # primary_output_directory="../cdk.out",
-#                 # env={
-#                 #     "AWS_DEFAULT_REGION": "eu-central-1",
-#                 #     "AWS_REGION": "eu-central-1",
-#                 # },
-#             ),
-#         )
-#         test_step = pipelines.CodeBuildStep("TestStep",
-#         input=pipelines.CodePipelineSource.connection(...),
-#         build_spec=codebuild.BuildSpec.from_source_filename("buildspec_test.yaml")
-# )
-
-#         deploy_stage = LambdaDeployStage(self, "DeployStage", env=Environment(region="eu-central-1"))
-#         pipeline.add_stage(deploy_stage, pre=[test_step])
+        pipeline.add_stage(deploy_stage, pre=[manual_approval,test_step])
