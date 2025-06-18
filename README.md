@@ -28,6 +28,7 @@ A fully‑automated CI/CD reference project that demonstrates how to:
 ### Project Structure (TL;DR)
 
 ```
+├── images                       # Screenshots
 ├── lambda_func/handler.py       # Lambda business logic
 ├── tests/test_lambda_handler.py # PyTest unit tests
 ├── lambda_s3_dynamodb_stack/
@@ -37,6 +38,7 @@ A fully‑automated CI/CD reference project that demonstrates how to:
 ├── app.py                       # CDK App entry point
 ├── cdk.json                     # CDK Configuration
 ├── .gitignore                   # Ignores unwanted project files.
+├── LICENSE.md                   # MIT License
 └── README.md                    # You are here
 ```
 
@@ -64,6 +66,9 @@ A fully‑automated CI/CD reference project that demonstrates how to:
 </p>
 
 <p align="center">
+  <img src="images/dynamodb.png" alt="DynamoDB Deployment" width="1000"/>
+</p>
+<p align="center">
   <img src="images/canary_deploy.png" alt="Lambda Canary Deployment" width="1000"/>
 </p>
 
@@ -71,12 +76,26 @@ A fully‑automated CI/CD reference project that demonstrates how to:
 
 ### Prerequisites
 
-| Requirement | Notes |
-|-------------|-------|
-| AWS Account | Tested in `eu‑central‑1` |
-| AWS CLI & CDK v2 | `npm i -g aws-cdk` |
-| Python 3.11 | Project code & tests |
-| GitHub Repo | Example: `kanitvural/20-lambda-s3-dynamodb-project` |
+| Requirement     | Notes                                                                                          |
+|----------------|------------------------------------------------------------------------------------------------|
+| AWS Account     | Tested in `eu‑central‑1`                                                                       |
+| AWS CLI & CDK v2 | [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), [Install AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-python.html) |
+| Python 3.11      | Project code & tests                                                                          |
+| GitHub Repo     | Example: `kanitvural/20-lambda-s3-dynamodb-project`                                            |
+### AWS CLI Configuration (One-Time)
+
+After creating a new IAM user with **Programmatic Access** and attaching a policy like `AdministratorAccess` or a least-privilege equivalent:
+
+```bash
+# 1. Configure AWS CLI with your credentials
+$ aws configure
+
+# You'll be prompted to enter:
+# AWS Access Key ID [None]: <YOUR_ACCESS_KEY_ID>
+# AWS Secret Access Key [None]: <YOUR_SECRET_ACCESS_KEY>
+# Default region name [None]: eu-central-1
+# Default output format [None]: json
+```
 
 ### One‑Time Setup
 
@@ -85,8 +104,11 @@ A fully‑automated CI/CD reference project that demonstrates how to:
 $ git clone https://github.com/kanitvural/20-lambda-s3-dynamodb-project.git
 $ cd 20-lambda-s3-dynamodb-project
 
+# 2. Initialize AWS CDK
+$ cdk init app --language python
+
 # 2. Install dependencies
-$ python -m venv .venv && source .venv/bin/activate
+$ source .venv/bin/activate
 $ pip install -r requirements.txt
 
 # 3. Bootstrap the target account / region (only once)
@@ -97,7 +119,11 @@ $ cdk deploy LambdaS3DynamoDBPipelineStack
 ```
 
 > **Important:**  
-> After the first deploy, open the *AWS Console → CodeStar Connections* page and click **“Authorize”** to approve the GitHub connection.
+> After the first deploy, open the *AWS Console → CodePipeline → Settings → Connections* page and click **"Authorize"** to approve the GitHub connection.
+>
+> <p align="center">
+  <img src="images/connection.png" alt="Upload to S3" width="1000"/>
+</p>
 
 > **CDK Setup Note:**  
 > Your GitHub [CodeStar connection ARN](https://docs.aws.amazon.com/dtconsole/latest/userguide/connections-create-github.html) must be stored in the `cdk.json` file under the `context` key.  
