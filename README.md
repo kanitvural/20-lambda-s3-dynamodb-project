@@ -36,8 +36,8 @@ GitHub → CodePipeline →
                    → Deploy Stage 
                    → CloudFormation 
                    → { S3 | Lambda | DynamoDB }
-                                      │
-                                      └── Lambda Canary Deployment (CodeDeploy)
+                              │
+                              └── Lambda Canary Deployment (CodeDeploy)
 ```
 * **🔐 CodeStar Connection** 
   - Secure GitHub connection without storing a personal access token.
