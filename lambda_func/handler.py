@@ -16,6 +16,8 @@ def lambda_handler(event, context):
                 "filename": {"S": file_name} 
             }
         )
+    
+    print(f"Processed {len(event['Records'])} records from S3")
         
     return {"statusCode": 200, "body": json.dumps("Success")}
 
