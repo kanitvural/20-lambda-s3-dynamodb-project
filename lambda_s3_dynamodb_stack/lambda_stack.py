@@ -65,7 +65,7 @@ class LambdaS3DynamoDBStack(Stack):
             source_arn=bucket.bucket_arn
         )
 
-        # CODEDEPLOY ENTEGRATION 
+        # CODEDEPLOY INTEGRATION 
 
         # Create Lambda version
         version = fn.current_version
