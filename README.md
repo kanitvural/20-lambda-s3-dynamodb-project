@@ -108,14 +108,25 @@ $ cd 20-lambda-s3-dynamodb-project
 # 2. Initialize AWS CDK
 $ cdk init app --language python
 
-# 2. Install dependencies
+# 3. Create virtual environment (if not created by CDK)
+$ python -m venv .venv
+
+# 4. Install dependencies
+# For Linux/macOS
 $ source .venv/bin/activate
+
+# For Windows (cmd)
+$ .venv\Scripts\activate.bat
+
+# For Windows (PowerShell)
+$ .venv\Scripts\Activate.ps1
+
 $ pip install -r requirements.txt
 
-# 3. Bootstrap the target account / region (only once)
+# 5. Bootstrap the target account / region (only once)
 $ cdk bootstrap aws://<ACCOUNT_ID>/eu-central-1
 
-# 4. Deploy the pipeline stack (only once)
+# 6. Deploy the pipeline stack (only once)
 $ cdk deploy LambdaS3DynamoDBPipelineStack
 ```
 
