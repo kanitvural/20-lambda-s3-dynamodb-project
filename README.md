@@ -1,4 +1,9 @@
-## Lambda‑S3‑DynamoDB — Self‑Mutating CDK Pipeline
+
+<p align="center">
+  <img src="images/aws_devops.jpg" alt="devops" width="1000"/>
+</p>
+
+## AWS (Amazon Web Services) Lambda‑S3‑DynamoDB — Self‑Mutating CDK Pipeline
 
 ### Project Description
 
