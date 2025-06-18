@@ -1,4 +1,4 @@
-# Customer
+# Direct Deployment of the Lambda, S3, and DynamoDB stack
 
 # import aws_cdk as cdk
 # from lambda_s3_dynamodb_stack.lambda_stack import LambdaS3DynamoDBStack
