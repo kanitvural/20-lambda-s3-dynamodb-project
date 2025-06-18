@@ -13,8 +13,9 @@ def lambda_handler(event, context):
         dynamodb.put_item(
             TableName=TABLE_NAME,
             Item={
-                "filename": {"S": file_name}  # string türünde olduğu belirtilmeli
+                "filename": {"S": file_name} 
             }
         )
+        
     return {"statusCode": 200, "body": json.dumps("Success")}
 
