@@ -41,8 +41,18 @@ class CICDPipelineStack(Stack):
             # },
             # fallback default build environment
         )
-        
-        manual_approval = pipelines.ManualApprovalStep("ManualApproval")
+
+        pipeline = pipelines.CodePipeline(
+            self,
+            "Pipeline",
+            synth=synth_step,
+        )
+
+        deploy_stage = LambdaDeployStage(
+            self,
+            "DeployStage",
+            env=Environment(region="eu-central-1"),
+        )
 
         test_step = pipelines.CodeBuildStep(
             "TestStep",
@@ -57,8 +67,6 @@ class CICDPipelineStack(Stack):
             ),
         )
 
-        pipeline = pipelines.CodePipeline(self, "Pipeline", synth=synth_step)
+        manual_approval = pipelines.ManualApprovalStep("ManualApproval")
 
-        deploy_stage = LambdaDeployStage(self, "DeployStage", env=Environment(region="eu-central-1"))
-
-        pipeline.add_stage(deploy_stage, pre=[manual_approval,test_step])
+        pipeline.add_stage(deploy_stage, pre=[test_step, manual_approval])

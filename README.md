@@ -5,17 +5,46 @@ A fully‑automated CI/CD reference project that demonstrates how to:
 1. **Trigger a Lambda function** whenever a file is uploaded to an S3 bucket.
 2. **Write the uploaded file name** into a DynamoDB table.
 3. **Deploy everything** (S3 + Lambda + DynamoDB) via an **AWS CDK pipeline** that continuously tests, synthesises, and deploys on every GitHub push.
+4. **Gradually roll out Lambda update's** using **AWS CodeDeploy Canary deployments** 
+
+### Project Structure (TL;DR)
+
+```
+├── lambda/handler.py           # Lambda business logic
+├── tests/                      # PyTest unit tests
+├── lambda_s3_dynamodb_stack/
+│   ├── lambda_stack.py         # S3 + Lambda + DynamoDB
+│   ├── lambda_stage.py         # Wraps the stack into a Stage
+│   └── pipeline_stack.py       # CodePipeline definition
+├── app.py                      # CDK App entry point
+└── README.md                   # You are here
+```
 
 ### Architecture
 
 ```
-GitHub → CodePipeline → CodeBuild (unit tests & cdk synth)
-                 │
-                 └── Deploy Stage → CloudFormation → { S3 | Lambda | DynamoDB }
-```
+AWS CDK  → CloudFormation → CodePipeline
 
-* **Self‑Mutating Pipeline** The pipeline is defined *inside* the CDK app, therefore any change to the code (new stacks, stages, etc.) automatically updates the pipeline itself.
-* **CodeStar Connection** Secure GitHub connection without storing a personal access token.
+GitHub → CodePipeline → 
+              │
+              └── Source 
+                   → Build (Synth) 
+                   → UpdatePipeline 
+                   → Assets 
+                   → Test Step 
+                   → Manual Approval 
+                   → Deploy Stage 
+                   → CloudFormation 
+                   → { S3 | Lambda | DynamoDB }
+                                      │
+                                      └── Lambda Canary Deployment (CodeDeploy)
+```
+* **🔐 CodeStar Connection** 
+  - Secure GitHub connection without storing a personal access token.
+* **✅ Self‑Mutating Pipeline** 
+  - The pipeline is defined *inside* the CDK app, therefore any change to the code (new stacks, stages, etc.) automatically updates the pipeline itself.
+* **🌀 Canary Deployments with CodeDeploy** 
+  - Lambda deployments use a canary strategy: 10% of traffic for 5 minutes before full rollout. Rollbacks happen automatically on failure.
 
 ### Prerequisites
 
@@ -76,18 +105,3 @@ $ cdk destroy DeployStage-LambdaStack
 # If you need to remove the bootstrapped resources as well
 $ cdk bootstrap aws://<ACCOUNT_ID>/eu-central-1 --termination
 ```
-
-### Project Structure (TL;DR)
-
-```
-├── lambda/handler.py           # Lambda business logic
-├── tests/                      # PyTest unit tests
-├── lambda_s3_dynamodb_stack/
-│   ├── lambda_stack.py         # S3 + Lambda + DynamoDB
-│   ├── lambda_stage.py         # Wraps the stack into a Stage
-│   └── pipeline_stack.py       # CodePipeline definition
-├── app.py                      # CDK App entry point
-└── README.md                   # You are here
-```
-
-Enjoy building serverless pipelines with AWS CDK! 🎉
