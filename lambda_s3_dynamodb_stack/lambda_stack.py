@@ -10,8 +10,8 @@ class LambdaS3DynamoDBStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         bucket = s3.Bucket(self, "MyBucket",
-            removal_policy=RemovalPolicy.DESTROY,    # Bucket silinirken otomatik silinsin
-            auto_delete_objects=True                  # İçindeki objeler de otomatik silinsin
+            removal_policy=RemovalPolicy.DESTROY,  
+            auto_delete_objects=True # Cleanup s3 objects otomatically via cloudformation custom resource. It creates additional lambda function.
         )
 
         table = dynamodb.Table(
