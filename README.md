@@ -56,15 +56,15 @@ A fully‑automated CI/CD reference project that demonstrates how to:
 ### Screenshots
 
 <p align="center">
-  <img src="images/pipeline.png" alt="Pipeline" width="600"/>
+  <img src="images/pipeline.png" alt="Pipeline" width="1000"/>
 </p>
 
 <p align="center">
-  <img src="images/upload.png" alt="Upload to S3" width="600"/>
+  <img src="images/upload.png" alt="Upload to S3" width="1000"/>
 </p>
 
 <p align="center">
-  <img src="images/canary_deploy.png" alt="Lambda Canary Deployment" width="600"/>
+  <img src="images/canary_deploy.png" alt="Lambda Canary Deployment" width="1000"/>
 </p>
 
 
