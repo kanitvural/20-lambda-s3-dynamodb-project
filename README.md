@@ -19,10 +19,6 @@ A self-mutating CDK pipeline updates itself automatically whenever the CDK code 
 
 This is a minimal end-to-end example of a serverless application continuously deployed via a **self-updating CDK pipeline**.
 
-> **Note:**  
-> This type of application could also be built using **AWS SAM**, but this project intentionally uses **AWS CDK** to showcase how CI/CD pipelines can automatically update themselves (*self-mutating*) when your infrastructure code changes.
-
-
 A fully‑automated CI/CD reference project that demonstrates how to:
 
 1. **Trigger a Lambda function** whenever a file is uploaded to an S3 bucket.
